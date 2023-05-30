@@ -443,7 +443,7 @@ Elpi Accumulate Db hb.db.
 Elpi Accumulate lp:{{
 
 main [A] :- A = indt-decl _, !,
-  time (with-attributes (with-logging (factory.declare-mixin A))) TM, coq.say "time HB.mixin:" TM.
+  std.time (with-attributes (with-logging (factory.declare-mixin A))) TM, coq.say "time HB.mixin:" TM.
 
 main _ :-
   coq.error "Usage: HB.mixin Record <MixinName> T of F A & … := { … }.".
@@ -499,7 +499,7 @@ Elpi Accumulate File "HB/common/synthesis.elpi".
 Elpi Accumulate File "HB/pack.elpi".
 Elpi Accumulate lp:{{
 
-solve (goal _ _ S _ [trm Ty | Args] as G) GLS :- time (with-attributes (with-logging (std.do! [
+solve (goal _ _ S _ [trm Ty | Args] as G) GLS :- std.time (with-attributes (with-logging (std.do! [
   pack.main Ty Args InstanceSkel,
   std.assert-ok! (coq.elaborate-skeleton InstanceSkel S Instance) "HB.pack_for: the instance does not solve the goal",
   log.refine.no_check Instance G GLS,
@@ -521,7 +521,7 @@ Elpi Accumulate File "HB/common/synthesis.elpi".
 Elpi Accumulate File "HB/pack.elpi".
 Elpi Accumulate lp:{{
 
-solve (goal _ _ Ty _ Args as G) GLS :- time (with-attributes (with-logging (std.do! [
+solve (goal _ _ Ty _ Args as G) GLS :- std.time (with-attributes (with-logging (std.do! [
   pack.main Ty Args InstanceSkel,
   std.assert-ok! (coq.elaborate-skeleton InstanceSkel Ty Instance) "HB.pack: the instance does not solve the goal",
   log.refine.no_check Instance G GLS,
@@ -610,7 +610,7 @@ Elpi Accumulate File "HB/structure.elpi".
 Elpi Accumulate Db hb.db.
 Elpi Accumulate lp:{{
 
-main [const-decl N (some B) Arity] :- !, time (std.do! [
+main [const-decl N (some B) Arity] :- !, std.time (std.do! [
   prod-last {coq.arity->term Arity} Ty,
   if (ground_term Ty) (Sort = Ty) (Sort = {{Type}}), sort Univ = Sort,
   with-attributes (with-logging (structure.declare N B Univ))
@@ -661,7 +661,7 @@ Elpi Accumulate Db hb.db.
 Elpi Accumulate lp:{{
 
 main [const-decl Name (some BodySkel) TyWPSkel] :- !,
-  time (with-attributes (with-logging (instance.declare-const Name BodySkel TyWPSkel _))) TI, coq.say "time HB.instance:" TI.
+  std.time (with-attributes (with-logging (instance.declare-const Name BodySkel TyWPSkel _))) TI, coq.say "time HB.instance:" TI.
 main [T0, F0] :- !,
   coq.warning "HB" "HB.deprecated" "The syntax \"HB.instance Key FactoryInstance\" is deprecated, use \"HB.instance Definition\" instead",
   with-attributes (with-logging (instance.declare-existing T0 F0)).
@@ -694,7 +694,7 @@ Elpi Accumulate File "HB/factory.elpi".
 Elpi Accumulate Db hb.db.
 Elpi Accumulate lp:{{
 main [A] :- (A = indt-decl _ ; A = const-decl _ _ _), !,
-  time (with-attributes (with-logging (factory.declare A))) TF, coq.say "time HB.factory:" TF.
+  std.time (with-attributes (with-logging (factory.declare A))) TF, coq.say "time HB.factory:" TF.
 
 main _ :-
   coq.error "Usage: HB.factory Record <FactoryName> T of F A & … := { … }.\nUsage: HB.factory Definition <FactoryName> T of F A := t.".
@@ -754,7 +754,7 @@ Elpi Accumulate File "HB/factory.elpi".
 Elpi Accumulate File "HB/builders.elpi".
 Elpi Accumulate Db hb.db.
 Elpi Accumulate lp:{{
-main [ctx-decl C] :- !, time (with-attributes (with-logging (builders.begin C))) TB, coq.say "time HB.builders:" TB.
+main [ctx-decl C] :- !, std.time (with-attributes (with-logging (builders.begin C))) TB, coq.say "time HB.builders:" TB.
 
 main _ :- coq.error "Usage: HB.builders Context A (f : F1 A).".
 }}.
@@ -776,7 +776,7 @@ Elpi Accumulate File "HB/export.elpi".
 Elpi Accumulate File "HB/builders.elpi".
 Elpi Accumulate Db hb.db.
 Elpi Accumulate lp:{{
-main [] :- !, time (with-attributes (with-logging builders.end)) TE, coq.say "time HB.end:" TE.
+main [] :- !, std.time (with-attributes (with-logging builders.end)) TE, coq.say "time HB.end:" TE.
 main _ :- coq.error "Usage: HB.end.".
 }}.
 Elpi Typecheck.
@@ -824,7 +824,7 @@ Elpi Accumulate File "HB/common/log.elpi".
 Elpi Accumulate File "HB/export.elpi".
 Elpi Accumulate Db hb.db.
 Elpi Accumulate lp:{{
-main [str M] :- !, time (with-attributes (with-logging (export.any M))) TEX, coq.say "time HB.export:" TEX.
+main [str M] :- !, std.time (with-attributes (with-logging (export.any M))) TEX, coq.say "time HB.export:" TEX.
 main _ :- coq.error "Usage: HB.export M.".
 }}.
 Elpi Typecheck.
@@ -850,8 +850,8 @@ Elpi Accumulate File "HB/common/log.elpi".
 Elpi Accumulate File "HB/export.elpi".
 Elpi Accumulate Db hb.db.
 Elpi Accumulate lp:{{
-main [] :- !, time (with-attributes (with-logging (export.reexport-all-modules-and-CS none))) TRE, coq.say "time HB.reexport:" TRE.
-main [str M] :- !, time (with-attributes (with-logging (export.reexport-all-modules-and-CS (some M)))) TRE, coq.say "time HB.reexport:" TRE.
+main [] :- !, std.time (with-attributes (with-logging (export.reexport-all-modules-and-CS none))) TRE, coq.say "time HB.reexport:" TRE.
+main [str M] :- !, std.time (with-attributes (with-logging (export.reexport-all-modules-and-CS (some M)))) TRE, coq.say "time HB.reexport:" TRE.
 main _ :- coq.error "Usage: HB.reexport.".
 }}.
 Elpi Typecheck.
@@ -897,7 +897,7 @@ Elpi Accumulate File "HB/lock.elpi".
 Elpi Accumulate Db hb.db.
 Elpi Accumulate lp:{{
 main [const-decl Name (some BoSkel) TySkel] :- !,
-  time (with-attributes (with-logging (lock.lock-def Name TySkel BoSkel))) TL, coq.say "time HB.lock:" TL.
+  std.time (with-attributes (with-logging (lock.lock-def Name TySkel BoSkel))) TL, coq.say "time HB.lock:" TL.
 main _ :- coq.error "Usage: HB.lock Definition name : ty := t.".
 }}.
 Elpi Typecheck.
@@ -952,7 +952,7 @@ Elpi Accumulate Db hb.db.
 Elpi Accumulate lp:{{
 
 main [Ctx] :- Ctx = ctx-decl _, !,
-  time (with-attributes (with-logging (
+  std.time (with-attributes (with-logging (
     factory.argument->w-mixins Ctx (pr FLwP _),
     context.declare FLwP _ _ _ _ _))) TD, coq.say "time HB.declare:" TD.
 
@@ -979,7 +979,7 @@ Elpi Accumulate File "HB/common/database.elpi".
 Elpi Accumulate File "HB/common/utils.elpi".
 Elpi Accumulate File "HB/common/log.elpi".
 Elpi Accumulate lp:{{
-main [trm Skel] :- !, time (with-attributes (with-logging (check-or-not Skel))) TC, coq.say "time HB.check:" TC.
+main [trm Skel] :- !, std.time (with-attributes (with-logging (check-or-not Skel))) TC, coq.say "time HB.check:" TC.
 main _ :- coq.error "usage: HB.check (term).".
 
 pred check-or-not i:term.
