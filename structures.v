@@ -1,6 +1,5 @@
 (* Support constants, to be kept in sync with shim/structures.v *)
-From Coq Require Import String ssreflect ssrfun.
-Export String.StringSyntax.
+From Coq Require Import ssreflect ssrfun.
 
 Variant error_msg := NoMsg | IsNotCanonicallyA (x : Type).
 Definition unify T1 T2 (t1 : T1) (t2 : T2) (s : error_msg) :=
@@ -1006,9 +1005,9 @@ Notation "`Error_cannot_unify: t1 'with' t2" := (unify t1 t2 None)
   Notation "`Error: t `is_not_canonically_a T" := (unify t _ (Some (is_not_canonically_a, T)))
   (at level 0, T at level 0, format "`Error:  t  `is_not_canonically_a  T", only printing) :
   form_scope.
-Notation "`Error: t msg T" := (unify t _ (Some (msg%string, T)))
-  (at level 0, msg, T at level 0, format "`Error:  t  msg  T", only printing) :
-  form_scope.
+(* Notation "`Error: t msg T" := (unify t _ (Some (msg%string, T))) *)
+(*   (at level 0, msg, T at level 0, format "`Error:  t  msg  T", only printing) : *)
+(*   form_scope. *)
 
 Notation "[find v | t1 ∼ t2 ] rest" :=
   (fun v (_ : unify t1 t2 None) => rest) (at level 0, only parsing) :
@@ -1020,4 +1019,4 @@ Notation "[find v | t1 ∼ t2 | msg ] rest" :=
   (fun v (_ : unify t1 t2 (Some msg)) => rest) (at level 0, only parsing) :
   form_scope.
 
-Global Open Scope string_scope.
+(* Global Open Scope string_scope. *)
